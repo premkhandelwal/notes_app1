@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notes_app1/businessLogic/cubit/bloc/notes_bloc.dart';
+import 'package:notes_app1/data/notes.dart';
 
 class EnterNotesScreen extends StatelessWidget {
   const EnterNotesScreen({Key? key}) : super(key: key);
@@ -45,7 +48,10 @@ maxLines: 3,
             decoration: InputDecoration(labelText: "Content",),
             // initialValue: "Title",
           ),
-          ElevatedButton(onPressed: addUser,child: Text("Submit"),)
+          ElevatedButton(onPressed: (){
+            context.read<NotesBloc>().add(AddNotes(Notes(content: contentController.text,title: titleController.text)));
+            //  context.<NotesBloc>().add(TodoAdded(Todo(_task, note: _note)));
+          },child: Text("Submit"),)
         ],
       ),
     );
