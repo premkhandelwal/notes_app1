@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:notes_app1/Repositories/notes_repo.dart';
+import 'package:notes_app1/repositories/notes_repo.dart';
 import 'package:notes_app1/data/notes.dart';
 
 part 'notes_event.dart';
@@ -24,10 +24,10 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
       yield* _mapUpdateNotesToState(event);
     }
     else if(event is FetchAllNotes || event is NotesInitial){
-      final res = notesRepository?.fetchAllNotes();
+      final res = await notesRepository?.fetchAllNotes();
         yield NotesLoadSuccess(res);
     }else if(event is FetchDeletedNotes){
-      final res = notesRepository?.fetchDeletedNotes();
+      final res = await notesRepository?.fetchDeletedNotes();
         yield NotesLoadSuccess(res);
     }
     else if(event is DeleteNotes){

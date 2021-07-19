@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:notes_app1/Repositories/notes_repo.dart';
+import 'package:notes_app1/repositories/notes_repo.dart';
 import 'package:notes_app1/data/notes.dart';
 
 class FirebaseNotesRepository implements NotesRepository {
@@ -31,10 +31,10 @@ class FirebaseNotesRepository implements NotesRepository {
   }
 
   @override
-  List<Notes?> fetchAllNotes() {
+  Future<List<Notes?>> fetchAllNotes() async {
     List<Notes?> listNotes = [];
 
-    notesCollection.get().then((querySnapshot) {
+   await notesCollection.get().then((querySnapshot) {
       querySnapshot.docs.forEach((result) {
         print(result.id);
         if (result.data()["isDeleted"] == false) {
@@ -63,10 +63,10 @@ class FirebaseNotesRepository implements NotesRepository {
   }
 
   @override
-  List<Notes?> fetchDeletedNotes() {
+  Future<List<Notes?>> fetchDeletedNotes() async {
     List<Notes?> listNotes = [];
 
-    notesCollection.get().then((querySnapshot) {
+    await notesCollection.get().then((querySnapshot) {
       querySnapshot.docs.forEach((result) {
         print(result.id);
         if (result.data()["isDeleted"] == true) {

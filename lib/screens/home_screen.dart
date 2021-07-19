@@ -15,7 +15,7 @@ bool isHomeScreen = true;
 class _HomeScreenState extends State<HomeScreen> {
   FocusNode first = new FocusNode();
   FocusNode second = new FocusNode();
-  bool isFirstRun = false;
+  bool isFirstRun = true;
   @override
   void initState() {
     isHomeScreen = true;
@@ -91,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   IconButton(
                     icon: Icon(
                       Icons.home,
-                      color: first.hasFocus ? Colors.purple : Colors.amber,
+                      color: first.hasFocus || isFirstRun ? Colors.purple : Colors.amber,
                     ),
                     onPressed: () {
                       setState(() {
@@ -156,103 +156,122 @@ class _GridViewBuilderState extends State<GridViewBuilder> {
       print("failed");
       print(context.read<NotesBloc>().state);
     } */
-    NotesState state = context.read<NotesBloc>().state;
 
-    if (isHomeScreen) {
-      context.read<NotesBloc>().add(FetchAllNotes());
-    } else {
-      context.read<NotesBloc>().add(FetchDeletedNotes());
-    }
 
-    if (state is NotesLoadSuccess) {
-      int listCount = int.parse(state.notes!.length.toString());
-      for (var i = 0; i < listCount; i++) {
-        checkBoxVals.add(false);
+    return BlocBuilder<NotesBloc, NotesState>(builder: (context, state) {
+      if (isHomeScreen) {
+        context.read<NotesBloc>().add(FetchAllNotes());
+      } else {
+        context.read<NotesBloc>().add(FetchDeletedNotes());
       }
-      return GridView.builder(
-        shrinkWrap: true,
-        itemCount: state.notes?.length,
-        padding: EdgeInsets.all(10),
-        scrollDirection: Axis.vertical,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            childAspectRatio: 0.8,
-            crossAxisCount: 2,
-            crossAxisSpacing: 20,
-            mainAxisSpacing: 20),
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onLongPress: () {
-              checkBoxVals.insert(index, true);
-              idListNotesToBeDeleted.add(state.notes![index]!.id);
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (ctx) => HomeScreen(
-                            isDelete: true,
-                          )));
-            },
-            onTap: () => widget.isDelete
-                ? setState(() {
-                    checkBoxVals[index] = !checkBoxVals[index];
-                    idListNotesToBeDeleted.add(state.notes![index]!.id);
-                  })
-                : Navigator.push(
+      if (state is NotesLoadSuccess) {
+        int listCount = int.parse(state.notes!.length.toString());
+        for (var i = 0; i < listCount; i++) {
+          checkBoxVals.add(false);
+        }
+        return GridView.builder(
+          shrinkWrap: true,
+          itemCount: state.notes?.length,
+          padding: EdgeInsets.all(10),
+          scrollDirection: Axis.vertical,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              childAspectRatio: 1,
+              crossAxisCount: 2,
+              crossAxisSpacing: 7,
+              mainAxisSpacing: 15),
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              onLongPress: () {
+                checkBoxVals.insert(index, true);
+                idListNotesToBeDeleted.add(state.notes![index]!.id);
+                Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (ctx) => EnterNotesScreen(
-                              isUpdate: true,
-                              note: state.notes?[index],
-                            ))),
-            child: Container(
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                border: Border.all(),
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                color: Colors.transparent,
+                        builder: (ctx) => HomeScreen(
+                              isDelete: true,
+                            )));
+              },
+              onTap: () => widget.isDelete
+                  ? setState(() {
+                      checkBoxVals[index] = !checkBoxVals[index];
+                      idListNotesToBeDeleted.add(state.notes![index]!.id);
+                    })
+                  : Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (ctx) => EnterNotesScreen(
+                                isUpdate: true,
+                                note: state.notes?[index],
+                              ))),
+              child: Container(
+                padding: EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  border: Border.all(),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  color: Colors.transparent,
+                ),
+                height: 40,
+                child: Column(
+                  children: [
+                    widget.isDelete
+                        ? Checkbox(
+                            value: checkBoxVals[index],
+                            onChanged: (value) {
+                              setState(() {
+                                checkBoxVals[index] = value!;
+                                if (value)
+                                  idListNotesToBeDeleted
+                                      .add(state.notes![index]!.id);
+                                else {
+                                  idListNotesToBeDeleted
+                                      .remove(state.notes![index]!.id);
+                                }
+                              });
+                            })
+                        : Container(
+                            height: 0,
+                            width: 0,
+                          ),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "${state.notes?[index]?.title}",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "${state.notes?[index]?.content}",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              height: 40,
-              child: Column(
-                children: [
-                  widget.isDelete
-                      ? Checkbox(
-                          value: checkBoxVals[index],
-                          onChanged: (value) {
-                            setState(() {
-                              checkBoxVals[index] = value!;
-                              if (value)
-                                idListNotesToBeDeleted
-                                    .add(state.notes![index]!.id);
-                              else {
-                                idListNotesToBeDeleted
-                                    .remove(state.notes![index]!.id);
-                              }
-                            });
-                          })
-                      : Container(),
-                  Text(
-                    "${state.notes?[index]?.title}",
-                    textAlign: TextAlign.center,
-                  ),
-                  Text(
-                    "${state.notes?[index]?.content}",
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      );
-    } else if (state is NotesInitial) {
-      return Center(child: CircularProgressIndicator());
-    } else {
-      return Text(
-        "No Items Present",
-        style: TextStyle(fontSize: 100),
-      );
-    }
+            );
+          },
+        );
+      } else if (state is NotesInitial) {
+        return Center(child: CircularProgressIndicator());
+      } else {
+        return Text(
+          "No Items Present",
+          style: TextStyle(fontSize: 100),
+        );
+      }
+    });
   }
 }
+/*   */
 
 /* Widget bottomNavigationBar(BuildContext context, Size size) {
   return ;

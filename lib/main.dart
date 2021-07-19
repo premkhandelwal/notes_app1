@@ -1,8 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:notes_app1/Repositories/firebase_notes_repo.dart';
-import 'package:notes_app1/Repositories/notes_repo.dart';
+import 'package:notes_app1/repositories/firebase_notes_repo.dart';
+import 'package:notes_app1/repositories/notes_repo.dart';
 import 'package:notes_app1/businessLogic/cubit/bloc/notes_bloc.dart';
 import 'package:notes_app1/screens/home_screen.dart';
 
