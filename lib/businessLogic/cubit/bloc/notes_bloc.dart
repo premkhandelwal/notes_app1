@@ -17,14 +17,36 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   Stream<NotesState> mapEventToState(
     NotesEvent event,
   ) async* {
-    if (event is AddNotes) {
+    if (event is AddNote) {
       yield* _mapAddNotesToState(event);
+    }
+    else if(event is UpdateNote){
+      yield* _mapUpdateNotesToState(event);
+    }
+    else if(event is FetchAllNotes || event is NotesInitial){
+      final res = notesRepository?.fetchAllNotes();
+        yield NotesLoadSuccess(res);
+    }else if(event is FetchDeletedNotes){
+      final res = notesRepository?.fetchDeletedNotes();
+        yield NotesLoadSuccess(res);
+    }
+    else if(event is DeleteNotes){
+       yield* _mapDeleteNotesToState(event);
     }
   }
 
-  Stream<NotesState> _mapAddNotesToState(AddNotes event) async* {
+  Stream<NotesState> _mapAddNotesToState(AddNote event) async* {
     notesRepository?.addNewNotes(event.note);
   }
+  Stream<NotesState> _mapUpdateNotesToState(UpdateNote event) async* {
+    notesRepository?.updateExistingNotes(event.note);
+  }
+Stream<NotesState> _mapDeleteNotesToState(DeleteNotes event) async* {
+    notesRepository?.deleteNotes(event.notes);
+  }
+
+
+
 
   @override
   void add(NotesEvent event) {

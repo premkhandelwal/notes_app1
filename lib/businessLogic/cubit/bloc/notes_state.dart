@@ -9,19 +9,12 @@ class NotesInitial extends NotesState {}
 class NotesLoadInProgress extends NotesState {}
 
 class NotesLoadSuccess extends NotesState {
-   NotesLoadSuccess({this.notes, this.activeNote});
+   NotesLoadSuccess(this.notes);
 
   final List<Notes?>? notes;
-  final Notes? activeNote;
 
-  NotesLoadSuccess copyWith({
-    List<Notes?>? notes,
-  }) {
-    return NotesLoadSuccess(
-      notes:  this.notes,
-      activeNote: activeNote ?? this.activeNote,
-    );
-  }
+
+  
 
 }
 
