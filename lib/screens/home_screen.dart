@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:notes_app1/businessLogic/cubit/bloc/notes_bloc.dart';
+import 'package:notes_app1/businessLogic/bloc/notes_bloc.dart';
 import 'package:notes_app1/screens/enter_notes_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -248,7 +248,7 @@ class _GridViewBuilderState extends State<GridViewBuilder> {
                       alignment: Alignment.topLeft,
                       child: Text(
                         "${state.notes?[index]?.content}",
-                        textAlign: TextAlign.center,
+                        textAlign: TextAlign.left,
                         style: TextStyle(
                           fontSize: 20,
                         ),
