@@ -41,10 +41,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   IconButton(
                     onPressed: () {
-                      print(idListNotesToBeDeleted);
-                      context
+                     
+                       context
                           .read<NotesBloc>()
                           .add(DeleteNotes(idListNotesToBeDeleted));
+                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text("Note Deleted")));
                     },
                     icon: Icon(
                       Icons.delete,
@@ -249,6 +251,8 @@ class _GridViewBuilderState extends State<GridViewBuilder> {
                       child: Text(
                         "${state.notes?[index]?.content}",
                         textAlign: TextAlign.left,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontSize: 20,
                         ),

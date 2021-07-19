@@ -40,27 +40,21 @@ class _EnterNotesScreenState extends State<EnterNotesScreen> {
       appBar: AppBar(
         title: TextFormField(
           controller: titleController,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20
-          ),
+          style: TextStyle(color: Colors.white, fontSize: 20),
           onTap: () {},
           textAlign: TextAlign.center,
           decoration: InputDecoration(
-             border: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  errorBorder: InputBorder.none,
-                  disabledBorder: InputBorder.none,
+            border: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            enabledBorder: InputBorder.none,
+            errorBorder: InputBorder.none,
+            disabledBorder: InputBorder.none,
             hintText: "Enter Title",
             suffixIcon: Icon(
               Icons.edit,
               color: Colors.white,
             ),
-            hintStyle: TextStyle(
-              color: Colors.white,
-              fontSize: 20
-            ),
+            hintStyle: TextStyle(color: Colors.white, fontSize: 20),
             fillColor: Colors.amber,
             floatingLabelBehavior: FloatingLabelBehavior.never,
           ),
@@ -81,10 +75,7 @@ class _EnterNotesScreenState extends State<EnterNotesScreen> {
                 onTap: () {},
                 cursorColor: Colors.deepPurpleAccent,
                 cursorHeight: 30,
-                style: TextStyle(
-           
-            fontSize: 19
-          ),
+                style: TextStyle(fontSize: 19),
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   focusedBorder: InputBorder.none,
@@ -110,7 +101,10 @@ class _EnterNotesScreenState extends State<EnterNotesScreen> {
                     content: contentController.text,
                     title: titleController.text)));
               }
-
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: widget.isUpdate
+                      ? Text("Update Note")
+                      : Text("Add Note")));
               //  context.<NotesBloc>().add(TodoAdded(Todo(_task, note: _note)));
             },
             child: widget.isUpdate ? Text("Update Note") : Text("Add Note"),
