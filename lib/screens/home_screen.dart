@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notes_app1/businessLogic/bloc/notes_bloc.dart';
-import 'package:notes_app1/screens/enter_notes_screen.dart';
+import 'package:notes_app1/screens/add_notes_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key, required this.isDelete}) : super(key: key);
@@ -150,14 +150,7 @@ class GridViewBuilder extends StatefulWidget {
 class _GridViewBuilderState extends State<GridViewBuilder> {
   @override
   Widget build(BuildContext context) {
-    /*  context.read<NotesBloc>().add(FetchNotes());
-    if (context.read<NotesBloc>().state is NotesLoadSuccess) {
-     print("pases");
-      print(context.read<NotesBloc>().notesRepository!.fetchNotes());
-    } else {
-      print("failed");
-      print(context.read<NotesBloc>().state);
-    } */
+  
 
 
     return BlocBuilder<NotesBloc, NotesState>(builder: (context, state) {

@@ -10,6 +10,8 @@ class FirebaseNotesRepository implements NotesRepository {
         .add({
           'title': "${notes.title}",
           'content': "${notes.content}",
+          'isVideoAdded':notes.isVideoAdded,
+          'videoLink':"${notes.videoLink}",
           'isDeleted': false
         })
         .then((value) => print("Note Added"))
@@ -24,7 +26,9 @@ class FirebaseNotesRepository implements NotesRepository {
         .doc("${notes.id}")
         .update({
           'title': "${notes.title}",
-          'content': "${notes.content}",
+          'content': "${notes.content}", 
+          'isVideoAdded':"${notes.isVideoAdded}",
+          'videoLink':"${notes.videoLink}",
         })
         .then((value) => print("User Updated"))
         .catchError((error) => print("Failed to update user: $error"));
@@ -34,13 +38,15 @@ class FirebaseNotesRepository implements NotesRepository {
   Future<List<Notes?>> fetchAllNotes() async {
     List<Notes?> listNotes = [];
 
-   await notesCollection.get().then((querySnapshot) {
+    await notesCollection.get().then((querySnapshot) {
       querySnapshot.docs.forEach((result) {
-        print(result.id);
+ 
         if (result.data()["isDeleted"] == false) {
           listNotes.add(Notes(
+            videoLink: result.data()["videoLink"],
               id: result.id,
               isDeleted: false,
+              isVideoAdded: result.data()["isVideoAdded"],
               title: result.data()["title"],
               content: result.data()["content"]));
         }
@@ -68,11 +74,13 @@ class FirebaseNotesRepository implements NotesRepository {
 
     await notesCollection.get().then((querySnapshot) {
       querySnapshot.docs.forEach((result) {
-        print(result.id);
+
         if (result.data()["isDeleted"] == true) {
           listNotes.add(Notes(
+            videoLink: result.data()["videoLink"],
               id: result.id,
               isDeleted: false,
+              isVideoAdded: result.data()["isVideoAdded"],
               title: result.data()["title"],
               content: result.data()["content"]));
         }
