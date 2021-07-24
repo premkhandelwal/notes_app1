@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notes_app1/businessLogic/bloc/notes_bloc.dart';
 import 'package:notes_app1/screens/add_notes_screen.dart';
+import 'package:notes_app1/screens/detail_notes_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key, required this.isDelete}) : super(key: key);
@@ -41,12 +42,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   IconButton(
                     onPressed: () {
-                     
-                       context
+                      context
                           .read<NotesBloc>()
                           .add(DeleteNotes(idListNotesToBeDeleted));
-                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text("Note Deleted")));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("Note Deleted")));
                     },
                     icon: Icon(
                       Icons.delete,
@@ -93,7 +93,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   IconButton(
                     icon: Icon(
                       Icons.home,
-                      color: first.hasFocus || isFirstRun ? Colors.purple : Colors.amber,
+                      color: first.hasFocus || isFirstRun
+                          ? Colors.purple
+                          : Colors.amber,
                     ),
                     onPressed: () {
                       setState(() {
@@ -150,9 +152,6 @@ class GridViewBuilder extends StatefulWidget {
 class _GridViewBuilderState extends State<GridViewBuilder> {
   @override
   Widget build(BuildContext context) {
-  
-
-
     return BlocBuilder<NotesBloc, NotesState>(builder: (context, state) {
       if (isHomeScreen) {
         context.read<NotesBloc>().add(FetchAllNotes());
@@ -177,7 +176,8 @@ class _GridViewBuilderState extends State<GridViewBuilder> {
           itemBuilder: (context, index) {
             return GestureDetector(
               onLongPress: () {
-                checkBoxVals.insert(index, true);
+                if (state.notes![index]!.isVideoAdded == false)
+                  checkBoxVals.insert(index, true);
                 idListNotesToBeDeleted.add(state.notes![index]!.id);
                 Navigator.push(
                     context,
@@ -186,18 +186,38 @@ class _GridViewBuilderState extends State<GridViewBuilder> {
                               isDelete: true,
                             )));
               },
-              onTap: () => widget.isDelete
-                  ? setState(() {
+              onTap: () {
+                if (widget.isDelete) {
+                  setState(
+                    () {
                       checkBoxVals[index] = !checkBoxVals[index];
                       idListNotesToBeDeleted.add(state.notes![index]!.id);
-                    })
-                  : Navigator.push(
+                    },
+                  );
+                } else {
+                  if (state.notes![index]!.isVideoAdded!) {
+                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (ctx) => EnterNotesScreen(
-                                isUpdate: true,
-                                note: state.notes?[index],
-                              ))),
+                        builder: (ctx) => DetailNotesScreen(
+                          
+                          note: state.notes![index],
+                        ),
+                      ),
+                    );
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (ctx) => EnterNotesScreen(
+                          isUpdate: true,
+                          note: state.notes?[index],
+                        ),
+                      ),
+                    );
+                  }
+                }
+              },
               child: Container(
                 padding: EdgeInsets.all(15),
                 decoration: BoxDecoration(
@@ -227,30 +247,40 @@ class _GridViewBuilderState extends State<GridViewBuilder> {
                             height: 0,
                             width: 0,
                           ),
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        "${state.notes?[index]?.title}",
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        "${state.notes?[index]?.content}",
-                        textAlign: TextAlign.left,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
+                    state.notes![index]!.isVideoAdded == false
+                        ? Column(
+                            children: [
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  "${state.notes?[index]?.title}",
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  "${state.notes?[index]?.content}",
+                                  textAlign: TextAlign.left,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        : Icon(
+                            Icons.play_circle_outline,
+                            size: 110,
+                            color: Colors.grey,
+                          ),
                   ],
                 ),
               ),

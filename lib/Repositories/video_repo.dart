@@ -1,5 +1,8 @@
-
+import 'package:video_player/video_player.dart';
 
 abstract class VideoRepository {
-  bool isVideoAdded(bool val);
+  Future<void>? initializeVideo(VideoPlayerController videoPlayerController);
+  Future<void> playVideo(VideoPlayerController videoPlayerController);
+  Future<void> pauseVideo(VideoPlayerController videoPlayerController);
+  void dispose(VideoPlayerController videoPlayerController);
 }
