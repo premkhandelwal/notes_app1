@@ -99,7 +99,7 @@ class __ControlsOverlayState extends State<ControlsOverlay> {
                     : widget.controller.play();
               });
             } catch (e) {
-              print("errrrrrrrrrrrrrrrrrrrrrrrrrrr$e");
+             
               setState(() {
                 nointernet = true;
               });

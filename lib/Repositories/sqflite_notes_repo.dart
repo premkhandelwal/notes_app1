@@ -39,19 +39,19 @@ class SqfLiteNotesRepo implements NotesRepository {
 
   @override
   Future<void> addNewNotes(Notes notes,BuildContext context) async {
-    print("I cam heree");
+
 
     final db = await database;
-    var res = await db!.rawInsert(
+  await db!.rawInsert(
       "INSERT INTO Notes(Note_Title,Note_Content,Video_Link,isVideoAdded,isDeleted)"
       " VALUES ('${notes.title}','${notes.content}','${notes.videoLink}','${notes.isVideoAdded}','false')",
     );
-    print("resf$res");
+ 
   
   }
 
   @override
-  Future<void> updateExistingNotes(Notes notes) async {
+  Future<void> updateExistingNotes(Notes notes,BuildContext context) async {
     final db = await database;
     await db!.rawUpdate(
       "UPDATE Notes SET Note_Title = ${notes.title},Note_Content = ${notes.content},Video_Link = ${notes.videoLink},isVideoAdded = ${notes.isVideoAdded} WHERE Firebase_UID = ${notes.id}",
@@ -70,13 +70,13 @@ class SqfLiteNotesRepo implements NotesRepository {
 
   @override
   Future<List<Notes?>> fetchAllNotes() async {
-    print("I am heree");
+     
     final db = await database;
     var res = await db!.query("Notes");
-    print(res);
+
     List<Notes> list =
         res.isNotEmpty ? res.map((c) => Notes.fromMap(c)).toList() : [];
-    print(list);
+   
     return list;
   }
 

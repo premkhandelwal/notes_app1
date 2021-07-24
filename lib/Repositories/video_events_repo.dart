@@ -14,12 +14,12 @@ class SqfLiteRepository implements VideoRepository {
 
   @override
   Future<void> playVideo(VideoPlayerController videoPlayerController) {
-    return videoPlayerController.play().catchError((e) => print("e$e"));
+    return videoPlayerController.play();
   }
 
   @override
   Future<void> pauseVideo(VideoPlayerController videoPlayerController) {
-    return videoPlayerController.pause().catchError((e) => print("e$e"));
+    return videoPlayerController.pause();
   }
 
   @override

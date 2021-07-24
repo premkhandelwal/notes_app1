@@ -7,7 +7,7 @@ import 'package:notes_app1/data/notes.dart';
 
 abstract class NotesRepository {
   Future<void> addNewNotes(Notes notes,BuildContext context);
-  Future<void> updateExistingNotes(Notes notes);
+  Future<void> updateExistingNotes(Notes notes,BuildContext context);
  Future<List<Notes?>> fetchAllNotes();
   Future<List<Notes?>> fetchDeletedNotes();
    Future<void> deleteNotes(List<String?> notes);

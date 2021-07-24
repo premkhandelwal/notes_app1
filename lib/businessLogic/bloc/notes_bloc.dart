@@ -32,7 +32,6 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
 
         res = await notesRepository?.fetchAllNotes();
       } catch (_) {
-        print("yoyo");
         res = await sqfLiteRepository?.fetchAllNotes();
         
 
@@ -60,14 +59,14 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
       notesRepository?.addNewNotes(event.note,event.context);
       
     } catch (e) {
-      print("Tera fittor");
+     
       sqfLiteRepository?.addNewNotes(event.note,event.context);
     }
   }
 
   Stream<NotesState> _mapUpdateNotesToState(UpdateNote event) async* {
-    notesRepository?.updateExistingNotes(event.note);
-    sqfLiteRepository?.updateExistingNotes(event.note);
+    notesRepository?.updateExistingNotes(event.note,event.context);
+    sqfLiteRepository?.updateExistingNotes(event.note,event.context);
   }
 
   Stream<NotesState> _mapDeleteNotesToState(DeleteNotes event) async* {

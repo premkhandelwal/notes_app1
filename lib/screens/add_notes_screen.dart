@@ -77,7 +77,7 @@ class _EnterNotesScreenState extends State<EnterNotesScreen> {
                         title: Text("Add Text"),
                         value: state.checkBoxVal,
                         onChanged: (val) {
-                          print(val);
+                        
                           context.read<CheckboxCubit>().changeCheckBoxVal(val!);
                         }),
                     if (state is CheckboxValTrue)
@@ -110,7 +110,7 @@ class _EnterNotesScreenState extends State<EnterNotesScreen> {
                         padding: EdgeInsets.all(15),
                         child: TextFormField(
                           validator: (value) {
-                            print(value);
+                          
                             if (value == "") {
                               return 'Please enter some text';
                             }
@@ -129,7 +129,7 @@ class _EnterNotesScreenState extends State<EnterNotesScreen> {
                             videoLinkController.clear();
                           }
                           if (widget.isUpdate) {
-                            context.read<NotesBloc>().add(UpdateNote(Notes(
+                            context.read<NotesBloc>().add(UpdateNote(context,Notes(
                                 videoLink: videoLinkController.text,
                                 isVideoAdded: state.checkBoxVal,
                                 isDeleted: false,

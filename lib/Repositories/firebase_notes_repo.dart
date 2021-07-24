@@ -11,9 +11,6 @@ class FirebaseNotesRepository implements NotesRepository {
 
   @override
   Future<void> addNewNotes(Notes notes, BuildContext context) async {
-    print("here1");
-
-    try {
        notesCollection.add({
         'title': "${notes.title}",
         'content': "${notes.content}",
@@ -23,14 +20,11 @@ class FirebaseNotesRepository implements NotesRepository {
       }).then((value) =>  ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text("Added Successfully"))));
 
-    } catch (e) {
-      print("cell$e");
-      throw SocketException("No Inet");
-    }
+ 
   }
 
   @override
-  Future<void> updateExistingNotes(Notes notes) {
+  Future<void> updateExistingNotes(Notes notes, BuildContext context) {
     // FirebaseFirestore.instance.collection('collection_Name').doc('doc_Name').collection('collection_Name').doc(code.documentId).update({'redeem': true});
 
     return notesCollection
@@ -41,8 +35,8 @@ class FirebaseNotesRepository implements NotesRepository {
           'isVideoAdded': "${notes.isVideoAdded}",
           'videoLink': "${notes.videoLink}",
         })
-        .then((value) => print("User Updated"))
-        .catchError((error) => print("Failed to update user: $error"));
+       .then((value) =>  ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Added Successfully"))));
   }
 
   @override

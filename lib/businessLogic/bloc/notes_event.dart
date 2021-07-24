@@ -14,8 +14,10 @@ class FetchAllNotes extends NotesEvent {}
 class FetchDeletedNotes extends NotesEvent {}
 
 class UpdateNote extends NotesEvent {
-  final Notes note;
+  final Notes note; 
+   final BuildContext context;
   UpdateNote(
+    this.context,
     this.note,
   );
 }
