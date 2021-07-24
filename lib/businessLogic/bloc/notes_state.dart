@@ -18,4 +18,6 @@ class NotesLoadSuccess extends NotesState {
 
 }
 
-class NotesLoadFailure extends NotesState {}
+class NotesOperationSuccess extends NotesState{}
+
+

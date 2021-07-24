@@ -2,11 +2,11 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:notes_app1/repositories/notes_repo.dart';
 import 'package:notes_app1/data/notes.dart';
 import 'package:notes_app1/repositories/sqflite_notes_repo.dart';
-import 'package:notes_app1/repositories/video_events_repo.dart';
 
 part 'notes_event.dart';
 part 'notes_state.dart';
@@ -29,14 +29,17 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
     } else if (event is FetchAllNotes || event is NotesInitial) {
       var res;
       try {
-        print("yoyo1");
 
         res = await notesRepository?.fetchAllNotes();
-      } on SocketException catch (_) {
+      } catch (_) {
         print("yoyo");
         res = await sqfLiteRepository?.fetchAllNotes();
-      } finally {
+        
+
+      } 
+      finally{
         yield NotesLoadSuccess(res);
+
       }
     } else if (event is FetchDeletedNotes) {
       var res;
@@ -53,8 +56,13 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   }
 
   Stream<NotesState> _mapAddNotesToState(AddNote event) async* {
-    notesRepository?.addNewNotes(event.note);
-    sqfLiteRepository?.addNewNotes(event.note);
+    try {
+      notesRepository?.addNewNotes(event.note,event.context);
+      
+    } catch (e) {
+      print("Tera fittor");
+      sqfLiteRepository?.addNewNotes(event.note,event.context);
+    }
   }
 
   Stream<NotesState> _mapUpdateNotesToState(UpdateNote event) async* {

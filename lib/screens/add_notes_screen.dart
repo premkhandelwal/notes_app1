@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notes_app1/businessLogic/bloc/notes_bloc.dart';
-import 'package:notes_app1/businessLogic/bloc/video_bloc.dart';
 import 'package:notes_app1/businessLogic/cubit/checkbox_cubit.dart';
 import 'package:notes_app1/data/notes.dart';
 
@@ -43,9 +42,8 @@ class _EnterNotesScreenState extends State<EnterNotesScreen> {
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      child: BlocBuilder<VideoBloc, VideoState>(
-        builder: (context, state) {
-          return Scaffold(
+      child: 
+           Scaffold(
             appBar: AppBar(
               title: TextFormField(
                 controller: titleController,
@@ -139,17 +137,15 @@ class _EnterNotesScreenState extends State<EnterNotesScreen> {
                                 content: contentController.text,
                                 title: titleController.text)));
                           } else {
-                            context.read<NotesBloc>().add(AddNote(Notes(
+                            context.read<NotesBloc>().add(AddNote(context,Notes(
                                 videoLink: videoLinkController.text,
                                 isVideoAdded: !state.checkBoxVal,
                                 isDeleted: false,
                                 content: contentController.text,
                                 title: titleController.text)));
                           }
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: widget.isUpdate
-                                  ? Text("Updated Note")
-                                  : Text("Added Note")));
+                          
+                       
                           //  context.<NotesBloc>().add(TodoAdded(Todo(_task, note: _note)));
                         }
                       },
@@ -161,8 +157,6 @@ class _EnterNotesScreenState extends State<EnterNotesScreen> {
                 );
               },
             ),
-          );
-        },
       ),
     );
   }

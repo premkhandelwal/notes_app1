@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:notes_app1/data/notes.dart';
 import 'package:notes_app1/repositories/notes_repo.dart';
 import 'package:path_provider/path_provider.dart';
@@ -37,7 +38,7 @@ class SqfLiteNotesRepo implements NotesRepository {
   }
 
   @override
-  Future<void> addNewNotes(Notes notes) async {
+  Future<void> addNewNotes(Notes notes,BuildContext context) async {
     print("I cam heree");
 
     final db = await database;
@@ -45,7 +46,8 @@ class SqfLiteNotesRepo implements NotesRepository {
       "INSERT INTO Notes(Note_Title,Note_Content,Video_Link,isVideoAdded,isDeleted)"
       " VALUES ('${notes.title}','${notes.content}','${notes.videoLink}','${notes.isVideoAdded}','false')",
     );
-    print("resf${res}");
+    print("resf$res");
+  
   }
 
   @override
@@ -68,13 +70,13 @@ class SqfLiteNotesRepo implements NotesRepository {
 
   @override
   Future<List<Notes?>> fetchAllNotes() async {
-    //print("I am heree");
+    print("I am heree");
     final db = await database;
     var res = await db!.query("Notes");
-    //print(res);
+    print(res);
     List<Notes> list =
         res.isNotEmpty ? res.map((c) => Notes.fromMap(c)).toList() : [];
-    //print(list);
+    print(list);
     return list;
   }
 

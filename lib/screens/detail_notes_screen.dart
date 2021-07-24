@@ -38,38 +38,28 @@ class _DetailNotesScreenState extends State<DetailNotesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: BlocBuilder<VideoBloc, VideoState>(
-        builder: (context, state) {
-          try {
-            if (state is VideoInitial) {
-              context
-                  .read<VideoBloc>()
-                  .add(VideoLoading(controller: _controller));
-            } else if (state is VideoLoading) {
-              return CircularProgressIndicator();
-            }
-            return nointernet
-                ? Text("No Internet")
-                : Container(
-                    padding: const EdgeInsets.all(20),
-                    child: AspectRatio(
-                      aspectRatio: _controller.value.aspectRatio,
-                      child: Stack(
-                        alignment: Alignment.bottomCenter,
-                        children: <Widget>[
-                          VideoPlayer(_controller),
+      body: BlocBuilder<VideoBloc, VideoState>(builder: (context, state) {
+        if (state is VideoInitial) {
+          context.read<VideoBloc>().add(VideoLoading(controller: _controller));
+        } else if (state is VideoLoading) {
+          return CircularProgressIndicator();
+        }
+        return Container(
+          padding: const EdgeInsets.all(20),
+          child: AspectRatio(
+            aspectRatio: _controller.value.aspectRatio,
+            child: Stack(
+              alignment: Alignment.bottomCenter,
+              children: <Widget>[
+                VideoPlayer(_controller),
 
-                          ControlsOverlay(controller: _controller),
-                          // VideoProgressIndicator(_controller, allowScrubbing: true),
-                        ],
-                      ),
-                    ),
-                  );
-          } catch (e) {
-            return Text("Failed");
-          }
-        },
-      ),
+                ControlsOverlay(controller: _controller),
+                // VideoProgressIndicator(_controller, allowScrubbing: true),
+              ],
+            ),
+          ),
+        );
+      }),
     );
   }
 }
@@ -86,42 +76,37 @@ class ControlsOverlay extends StatefulWidget {
 class __ControlsOverlayState extends State<ControlsOverlay> {
   @override
   Widget build(BuildContext context) {
-    try {
-      return nointernet
-          ? Stack(
-              children: <Widget>[
-                !widget.controller.value.isPlaying
-                    ? Container(
-                        color: Colors.black26,
-                        child: Center(
-                          child: Icon(
-                            Icons.play_arrow,
-                            color: Colors.white,
-                            size: 100.0,
-                          ),
-                        ),
-                      )
-                    : SizedBox.shrink(),
-                GestureDetector(
-                  onTap: () {
-                    try {
-                      setState(() {
-                        widget.controller.value.isPlaying
-                            ? widget.controller.pause()
-                            : widget.controller.play();
-                      });
-                    } catch (e) {
-                      setState(() {
-                        nointernet = true;
-                      });
-                    }
-                  },
+    return Stack(
+      children: <Widget>[
+        !widget.controller.value.isPlaying
+            ? Container(
+                color: Colors.black26,
+                child: Center(
+                  child: Icon(
+                    Icons.play_arrow,
+                    color: Colors.white,
+                    size: 100.0,
+                  ),
                 ),
-              ],
-            )
-          : Text("No Internet");
-    } catch (e) {
-      return Text("No Internet");
-    }
+              )
+            : SizedBox.shrink(),
+        GestureDetector(
+          onTap: () {
+            try {
+              setState(() {
+                widget.controller.value.isPlaying
+                    ? widget.controller.pause()
+                    : widget.controller.play();
+              });
+            } catch (e) {
+              print("errrrrrrrrrrrrrrrrrrrrrrrrrrr$e");
+              setState(() {
+                nointernet = true;
+              });
+            }
+          },
+        ),
+      ],
+    );
   }
 }

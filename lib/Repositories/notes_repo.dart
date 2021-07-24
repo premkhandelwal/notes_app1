@@ -1,11 +1,12 @@
 
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:notes_app1/data/notes.dart';
 
 
 abstract class NotesRepository {
-  Future<void> addNewNotes(Notes notes);
+  Future<void> addNewNotes(Notes notes,BuildContext context);
   Future<void> updateExistingNotes(Notes notes);
  Future<List<Notes?>> fetchAllNotes();
   Future<List<Notes?>> fetchDeletedNotes();

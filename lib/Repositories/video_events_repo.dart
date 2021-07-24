@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:notes_app1/repositories/video_repo.dart';
 import 'package:video_player/video_player.dart';
 
@@ -6,9 +5,8 @@ class SqfLiteRepository implements VideoRepository {
   @override
   Future<void>? initializeVideo(VideoPlayerController videoPlayerController) {
     try {
-      return videoPlayerController
-          .initialize()
-          .onError((error, stackTrace) => videoPlayerController.dispose());
+      return videoPlayerController.initialize().onError(
+          (error, stackTrace) => videoPlayerController.removeListener(() {}));
     } catch (e) {
       return null;
     }

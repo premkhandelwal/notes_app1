@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,11 +14,11 @@ import 'package:notes_app1/screens/home_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  try {
-    await Firebase.initializeApp();
-  } catch (e) {
-    print("essssssssssssssssssssssssss$e");
-  }
+
+  await Firebase.initializeApp();
+  FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  firebaseFirestore.settings.copyWith(persistenceEnabled: false);
+
   runApp(MyApp(
     sqfLiteRepository: SqfLiteNotesRepo(),
     videoRepository: SqfLiteRepository(),

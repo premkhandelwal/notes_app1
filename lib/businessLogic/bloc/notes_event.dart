@@ -4,8 +4,8 @@ part of 'notes_bloc.dart';
 abstract class NotesEvent {}
 
 class AddNote extends NotesEvent {
-  AddNote(this.note);
-
+  AddNote(this.context, this.note);
+  final BuildContext context;
   final Notes note;
 }
 
