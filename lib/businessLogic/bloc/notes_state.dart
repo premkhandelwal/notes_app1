@@ -12,10 +12,6 @@ class NotesLoadSuccess extends NotesState {
    NotesLoadSuccess(this.notes);
 
   final List<Notes?>? notes;
-
-
-  
-
 }
 
 class NotesOperationSuccess extends NotesState{}

@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notes_app1/businessLogic/bloc/video_bloc.dart';
 import 'package:notes_app1/businessLogic/cubit/checkbox_cubit.dart';
-import 'package:notes_app1/repositories/firebase_notes_repo.dart';
+import 'package:notes_app1/data/dataProvidersql.dart';
+import 'package:notes_app1/data/dataproviderFirebase.dart';
+import 'package:notes_app1/data/videoPlayerfunctions.dart';
 import 'package:notes_app1/repositories/notes_repo.dart';
 import 'package:notes_app1/businessLogic/bloc/notes_bloc.dart';
-import 'package:notes_app1/repositories/sqflite_notes_repo.dart';
-import 'package:notes_app1/repositories/video_events_repo.dart';
 import 'package:notes_app1/repositories/video_repo.dart';
 import 'package:notes_app1/screens/home_screen.dart';
 
@@ -20,21 +20,18 @@ Future<void> main() async {
   firebaseFirestore.settings.copyWith(persistenceEnabled: false);
 
   runApp(MyApp(
-    sqfLiteRepository: SqfLiteNotesRepo(),
-    videoRepository: SqfLiteRepository(),
-    notesRepository: FirebaseNotesRepository(),
+   videoRepository: VideoRepository(videoPlayerFunctions: VideoPlayerFunctions()),
+    notesRepository: NotesRepository(dataProviderFirebase: DataProviderFirebase(),dataProviderSql: DataProviderSql()),
   ));
 }
 
 class MyApp extends StatelessWidget {
   final NotesRepository notesRepository;
-  final VideoRepository videoRepository;
-  final SqfLiteNotesRepo sqfLiteRepository;
+  final VideoRepository? videoRepository;
   const MyApp(
       {Key? key,
-      required this.notesRepository,
-      required this.videoRepository,
-      required this.sqfLiteRepository})
+      required this.notesRepository, this.videoRepository,
+      })
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -43,7 +40,8 @@ class MyApp extends StatelessWidget {
         BlocProvider<NotesBloc>(
           create: (_) => NotesBloc(
               notesRepository: notesRepository,
-              sqfLiteRepository: sqfLiteRepository),
+
+              ),
         ),
         BlocProvider<VideoBloc>(
           create: (_) => VideoBloc(videoRepository: videoRepository),
@@ -54,8 +52,7 @@ class MyApp extends StatelessWidget {
       ],
       child: BlocProvider<NotesBloc>(
           create: (_) => NotesBloc(
-              notesRepository: notesRepository,
-              sqfLiteRepository: sqfLiteRepository),
+              notesRepository: notesRepository),
           child: MaterialApp(
             title: 'Flutter Demo',
             theme: ThemeData(

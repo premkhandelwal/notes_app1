@@ -153,19 +153,22 @@ class _GridViewBuilderState extends State<GridViewBuilder> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NotesBloc, NotesState>(builder: (context, state) {
-      if (isHomeScreen) {
+      /*  if (isHomeScreen) {
         context.read<NotesBloc>().add(FetchAllNotes());
       } else {
         context.read<NotesBloc>().add(FetchDeletedNotes());
-      }
+      } */
       if (state is NotesLoadSuccess) {
-        int listCount = int.parse(state.notes!.length.toString());
+        int listCount = 0;
+        if (state.notes != null) {
+          listCount = int.parse(state.notes!.length.toString());
+        }
         for (var i = 0; i < listCount; i++) {
           checkBoxVals.add(false);
         }
         return GridView.builder(
           shrinkWrap: true,
-          itemCount: state.notes?.length,
+          itemCount: listCount,
           padding: EdgeInsets.all(10),
           scrollDirection: Axis.vertical,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -196,11 +199,10 @@ class _GridViewBuilderState extends State<GridViewBuilder> {
                   );
                 } else {
                   if (state.notes![index]!.isVideoAdded!) {
-                     Navigator.push(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (ctx) => DetailNotesScreen(
-                          
                           note: state.notes![index],
                         ),
                       ),
@@ -247,7 +249,8 @@ class _GridViewBuilderState extends State<GridViewBuilder> {
                             height: 0,
                             width: 0,
                           ),
-                    state.notes![index]!.isVideoAdded == false
+                    state.notes != null &&
+                            state.notes![index]!.isVideoAdded == false
                         ? Column(
                             children: [
                               Align(
@@ -276,11 +279,16 @@ class _GridViewBuilderState extends State<GridViewBuilder> {
                               ),
                             ],
                           )
-                        : Icon(
-                            Icons.play_circle_outline,
-                            size: 110,
-                            color: Colors.grey,
-                          ),
+                        : state.notes != null &&
+                                state.notes![index]!.isVideoAdded == true
+                            ? Icon(
+                                Icons.play_circle_outline,
+                                size: 110,
+                                color: Colors.grey,
+                              )
+                            : Container(
+                              color: Colors.amber,
+                            ),
                   ],
                 ),
               ),
@@ -288,6 +296,7 @@ class _GridViewBuilderState extends State<GridViewBuilder> {
           },
         );
       } else if (state is NotesInitial) {
+        context.read<NotesBloc>().add(FetchAllNotes());
         return Center(child: CircularProgressIndicator());
       } else {
         return Text(
