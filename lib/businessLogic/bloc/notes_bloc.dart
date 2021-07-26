@@ -20,7 +20,6 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   Stream<NotesState> mapEventToState(
     NotesEvent event,
   ) async* {
-    print("state");
     if (state is NotesInitial) {
       yield* _mapFetchAllNotesToState();
     } else if (event is AddNote) {
@@ -49,7 +48,7 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   }
 
   Stream<NotesState> _mapFetchAllNotesToState() async* {
-    print("hey");
+
     
       var notes = await notesRepository?.fetchAllNotes();
     yield NotesLoadSuccess(notes);

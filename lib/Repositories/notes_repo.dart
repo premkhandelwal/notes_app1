@@ -28,7 +28,7 @@ class NotesRepository {
   Future<List<Notes?>?>? fetchAllNotes() async {
     List<Notes?>? x = <Notes>[];
 
-    print("In fetch notes 1");
+
 try {
   
    x =await dataProviderFirebase?.fetchAllNotes();
