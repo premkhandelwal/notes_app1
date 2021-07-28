@@ -127,7 +127,6 @@ class _EnterNotesScreenState extends State<EnterNotesScreen> {
                       }
                       if (widget.isUpdate) {
                         context.read<NotesBloc>().add(UpdateNote(
-                            context,
                             Notes(
                                 videoLink: videoLinkController.text,
                                 isVideoAdded: state.checkBoxVal,
@@ -137,7 +136,6 @@ class _EnterNotesScreenState extends State<EnterNotesScreen> {
                                 title: titleController.text)));
                       } else {
                         context.read<NotesBloc>().add(AddNote(
-                            context,
                             Notes(
                                 videoLink: videoLinkController.text,
                                 isVideoAdded: !state.checkBoxVal,
